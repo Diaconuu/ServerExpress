@@ -52,7 +52,7 @@ router.post("/login",validateEmail(), async (req, res) => {
 
 router.get("/me", async (req, res) => {
 
-    const authToken = req.header("authToken");
+    const authToken = req.headers.authorization;
     if (!authToken) {
         res.status(401).json({ message: 'No Token' })
     }
@@ -76,7 +76,7 @@ router.get("/me", async (req, res) => {
 
 router.post('/logout', async (req, res) => {
 
-    const authToken = req.header("authToken");
+    const authToken = req.headers.authorization;
     if (!authToken) {
         res.status(401).json({ message: 'No Token' })
     }
