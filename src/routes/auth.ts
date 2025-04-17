@@ -1,7 +1,7 @@
-import express, { Request, Response, NextFunction } from "express";
+import express, { Request, Response } from "express";
 import bcrypt from "bcrypt-ts";
 import { v4 as uuidv4 } from 'uuid'
-import {User,Insert_user} from "../models/User";
+import {Insert_user} from "../models/User";
 import {body, validationResult} from "express-validator";
 import pool from "../config/db";
 

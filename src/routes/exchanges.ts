@@ -4,7 +4,7 @@ import pool from "../config/db";
 const router = express.Router();
 
 const getUserFromToken = async (req: Request) => {
-    const authToken = req.headers.authorization;
+    const authToken = req.headers.authorization?.replace('', '')
     if (!authToken) return null
     const [rows] = await pool.query('SELECT * FROM users WHERE authToken = ?', [authToken])
     return (rows as any)[0] || null
