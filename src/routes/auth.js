@@ -59,7 +59,7 @@ router.post("/login", validateEmail(), (req, res) => __awaiter(void 0, void 0, v
     }
 }));
 router.get("/me", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const authToken = req.header("authToken");
+    const authToken = req.headers.authorization;
     if (!authToken) {
         res.status(401).json({ message: 'No Token' });
     }
@@ -78,7 +78,7 @@ router.get("/me", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 }));
 router.post('/logout', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const authToken = req.header("authToken");
+    const authToken = req.headers.authorization;
     if (!authToken) {
         res.status(401).json({ message: 'No Token' });
     }

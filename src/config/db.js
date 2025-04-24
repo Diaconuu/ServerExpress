@@ -6,9 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const promise_1 = __importDefault(require("mysql2/promise"));
 const pool = promise_1.default.createPool({
     host: 'sql8.freesqldatabase.com',
-    user: 'sql8773452',
-    password: 'dYPMbAZ6rT',
-    database: 'sql8773452',
+    user: 'sql8774861',
+    password: 'z6evY14kdG',
+    database: 'sql8774861',
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0

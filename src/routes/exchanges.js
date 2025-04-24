@@ -16,7 +16,8 @@ const express_1 = __importDefault(require("express"));
 const db_1 = __importDefault(require("../config/db"));
 const router = express_1.default.Router();
 const getUserFromToken = (req) => __awaiter(void 0, void 0, void 0, function* () {
-    const authToken = req.headers.authorization;
+    var _a;
+    const authToken = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.replace('', '');
     if (!authToken)
         return null;
     const [rows] = yield db_1.default.query('SELECT * FROM users WHERE authToken = ?', [authToken]);
@@ -44,7 +45,7 @@ router.get('/sent', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     if (!user)
         res.status(401).json({ message: 'Not authorized' });
     try {
-        const [rows] = yield db_1.default.query(`SELECT e.*, i.title as insertion_target
+        const [rows] = yield db_1.default.query(`SELECT e.*, i.title
        FROM exchanges e
        JOIN insertions i ON e.id_insertion = i.id
        WHERE e.id_user = ?
@@ -62,7 +63,7 @@ router.get('/received', (req, res) => __awaiter(void 0, void 0, void 0, function
     if (!user)
         res.status(401).json({ message: 'Not authorized' });
     try {
-        const [rows] = yield db_1.default.query(`SELECT e.*, i.title as insertion_target
+        const [rows] = yield db_1.default.query(`SELECT e.*, i.title
        FROM exchanges e
        JOIN insertions i ON e.id_insertion = i.id
        WHERE i.user_id = ?
@@ -81,14 +82,14 @@ router.patch('/:id/accept', (req, res) => __awaiter(void 0, void 0, void 0, func
         res.status(401).json({ message: 'Not authorized' });
     const { id } = req.params;
     try {
-        const [rows] = yield db_1.default.query(`SELECT e.*, i.user_id as insertion_owner
+        const [rows] = yield db_1.default.query(`SELECT e.*, i.user_id 
        FROM exchanges e
        JOIN insertions i ON e.id_insertion = i.id
        WHERE e.id = ?`, [id]);
         const exchange = rows[0];
         if (!exchange)
             res.status(404).json({ message: 'Exchange not found' });
-        if (exchange.insertion_owner !== user.id) {
+        if (exchange.user_id !== user.id) {
             res.status(403).json({ message: 'Not authorized to accept this insertion' });
         }
         yield db_1.default.query('UPDATE exchanges SET state = "accepted" WHERE id = ?', [id]);
@@ -107,14 +108,14 @@ router.patch('/:id/refuse', (req, res) => __awaiter(void 0, void 0, void 0, func
         res.status(401).json({ message: 'Not authorized' });
     const { id } = req.params;
     try {
-        const [rows] = yield db_1.default.query(`SELECT e.*, i.user_id as insertion_owner
+        const [rows] = yield db_1.default.query(`SELECT e.*, i.user_id
        FROM exchanges e
        JOIN insertions i ON e.id_insertion = i.id
        WHERE e.id = ?`, [id]);
         const exchange = rows[0];
         if (!exchange)
             res.status(404).json({ message: 'Exchange not found' });
-        if (exchange.insertion_owner !== user.id) {
+        if (exchange.user_id !== user.id) {
             res.status(403).json({ message: 'Not authorized to refuse this insertion' });
         }
         yield db_1.default.query('UPDATE exchanges SET state = "refused" WHERE id = ?', [id]);

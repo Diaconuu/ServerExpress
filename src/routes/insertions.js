@@ -16,7 +16,8 @@ const express_1 = __importDefault(require("express"));
 const db_1 = __importDefault(require("../config/db"));
 const router = express_1.default.Router();
 const getUserFromToken = (req) => __awaiter(void 0, void 0, void 0, function* () {
-    const authToken = req.headers.authorization;
+    var _a;
+    const authToken = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.replace('', '');
     if (!authToken)
         return null;
     const [rows] = yield db_1.default.query('SELECT * FROM users WHERE authToken = ?', [authToken]);
