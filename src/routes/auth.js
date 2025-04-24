@@ -77,6 +77,27 @@ router.get("/me", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         console.log(err);
     }
 }));
+router.patch('/me', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const authToken = req.headers.authorization;
+    if (!authToken)
+        res.status(401).json({ message: 'No Token' });
+    const updates = req.body;
+    const fields = Object.keys(updates);
+    if (fields.length === 0) {
+        res.status(400).json({ message: 'Nessun campo da aggiornare' });
+    }
+    const setClause = fields.map(field => `${field} = ?`).join(', ');
+    const values = fields.map(field => updates[field]);
+    const query = `UPDATE users SET ${setClause} WHERE authToken = ?`;
+    try {
+        yield db_1.default.query(query, [...values, authToken]);
+        res.status(200).json({ message: 'Profilo aggiornato' });
+    }
+    catch (err) {
+        console.error('Errore aggiornamento profilo:', err);
+        res.sendStatus(500);
+    }
+}));
 router.post('/logout', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const authToken = req.headers.authorization;
     if (!authToken) {

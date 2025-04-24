@@ -8,6 +8,6 @@ export interface User {
 }
 
 export const Insert_user = `
-  INSERT INTO users (email, password, name, surname,authToken)
-  VALUES (?, ?, ?, ?,?)
+  INSERT INTO users (email, password, name, surname)
+  VALUES (?, ?, ?, ?)
 `
