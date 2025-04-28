@@ -43,6 +43,26 @@ router.get('/', async (_req: Request, res: Response) => {
     }
 })
 
+//mie inserzioni
+router.get('/myinsertions', async (req: Request, res: Response) => {
+    const user = await getUserFromToken(req)
+    if (!user) {
+        res.status(401).json({ message: 'Not authorized' })
+    }
+
+    try {
+        const [rows] = await pool.query(
+            'SELECT * FROM insertions WHERE user_id = ? AND state = true ORDER BY createdAt DESC',
+            [user.id]
+        )
+        res.status(200).json(rows)
+    } catch (err) {
+        console.error(err)
+        res.sendStatus(500)
+    }
+})
+
+
 //dettaglio inserzione
 router.get('/:id', async (req: Request, res: Response) => {
     const { id } = req.params

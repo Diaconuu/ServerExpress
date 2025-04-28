@@ -50,6 +50,21 @@ router.get('/', (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.sendStatus(500);
     }
 }));
+//mie inserzioni
+router.get('/myinsertions', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield getUserFromToken(req);
+    if (!user) {
+        res.status(401).json({ message: 'Not authorized' });
+    }
+    try {
+        const [rows] = yield db_1.default.query('SELECT * FROM insertions WHERE user_id = ? AND state = true ORDER BY createdAt DESC', [user.id]);
+        res.status(200).json(rows);
+    }
+    catch (err) {
+        console.error(err);
+        res.sendStatus(500);
+    }
+}));
 //dettaglio inserzione
 router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
